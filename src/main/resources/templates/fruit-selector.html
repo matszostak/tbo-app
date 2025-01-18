@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Fruit Selector</title>
+</head>
+<body>
+    <h1>Select a Fruit</h1>
+    <form action="/select-fruit" method="post">
+        <label for="fruit">Choose a fruit:</label>
+        <select name="fruit" id="fruit">
+            <option th:each="fruit : ${fruits}" th:value="${fruit}" th:text="${fruit}"></option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
