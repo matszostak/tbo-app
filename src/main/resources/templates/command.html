@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Command Executor</title>
+    <script>
+        function encodeAndSubmit() {
+            const selectElement = document.getElementById("command");
+            const selectedValue = selectElement.value;
+            const encodedValue = btoa(selectedValue);
+            document.getElementById("encodedCommand").value = encodedValue;
+            document.getElementById("commandForm").submit();
+        }
+    </script>
+</head>
+<body>
+    <h1>Select a command to execute</h1>
+    <form id="commandForm" action="/show-status" method="post">
+        <label for="command">Choose a command:</label>
+        <select id="command">
+            <option th:each="command : ${commands}" th:value="${command}" th:text="${command}"></option>
+        </select>
+        <input type="hidden" name="encodedCommand" id="encodedCommand">
+        <button type="button" onclick="encodeAndSubmit()">Submit</button>
+    </form>
+</body>
+</html>

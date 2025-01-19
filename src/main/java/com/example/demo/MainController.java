@@ -19,22 +19,24 @@ public class MainController {
 		return "index";
 	}
 
-	@GetMapping("/show-fruit")
+	@GetMapping("/select-command")
 	public String showFruitSelector(Model model) {
-		List<String> fruits = Arrays.asList("echo 123", "command2", "command3", "command4");
-		model.addAttribute("fruits", fruits);
-		return "fruit-selector";
+		List<String> commands = Arrays.asList("ECHO TEST", "PING", "COMMAND 3", "COMMAND 4");
+		List<String> encodedCommands = Arrays.asList("ZWNobyBjb21tYW5kMQ==", "ZWNobyBjb21tYW5kMg==", "ZWNobyBjb21tYW5kMw==", "ZWNobyBjb21tYW5kNA==");
+		model.addAttribute("commands", commands);
+		model.addAttribute("encodedCommands", encodedCommands);
+		return "command";
 	}
 
-	@PostMapping("/select-fruit")
-	public String handleFruitSelection(@RequestParam("fruit") String input, Model model) {
-		model.addAttribute("selectedFruit", input);
+	@PostMapping("/show-status")
+	public String handleFruitSelection(@RequestParam("encodedCommand") String input, Model model) {
 		System.out.println(input);
+		String decoded_input = new String(Base64.getDecoder().decode(input));
+		System.out.println(decoded_input);
+		String command = String.format("%s", decoded_input);
+		model.addAttribute("selectedCommand", command);
 		try {
-			String decoded_input = new String(Base64.getDecoder().decode(input));
-			System.out.println(decoded_input);
-			String command = String.format("%s", decoded_input);
-			NuProcessBuilder pb = new NuProcessBuilder(Arrays.asList("./script.sh", "1", "2", command, "echo XD"));
+			NuProcessBuilder pb = new NuProcessBuilder(Arrays.asList("./script.sh", "STARTING COMMAND.", "CHECKS OK", command, "/bin/clear", "echo DONE."));
 			ProcessHandler handler = new ProcessHandler();
 			pb.setProcessListener(handler);
 			pb.start();
